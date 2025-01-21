@@ -19,6 +19,7 @@ public class PathManager : MonoBehaviour
     private LineRenderer currentPath;
     private Dictionary<string, Vector3> lastKnownPositions = new Dictionary<string, Vector3>();
     private GameObject pathParent; // Parent fixe pour tous les chemins
+    private List<GameObject> pathLines = new List<GameObject>();
 
     private void Awake()
     {
@@ -206,11 +207,37 @@ public class PathManager : MonoBehaviour
 
     public void ClearPath()
     {
+        // Réinitialiser les cubes sélectionnés
+        if (startCube != null)
+        {
+            var startSelector = startCube.GetComponent<CubeSelector>();
+            if (startSelector != null)
+                startSelector.Deselect();
+        }
+        if (endCube != null)
+        {
+            var endSelector = endCube.GetComponent<CubeSelector>();
+            if (endSelector != null)
+                endSelector.Deselect();
+        }
+
+        // Réinitialiser les références
         startCube = null;
         endCube = null;
+
+        // Effacer le chemin visuel
         if (currentPath != null)
             Destroy(currentPath.gameObject);
+
+        // Désactiver le mode navigation pour tous les cubes
+        var cubeSelectors = FindObjectsOfType<CubeSelector>();
+        foreach (var selector in cubeSelectors)
+        {
+            selector.SetNavigationMode(false);
+        }
+
         UpdateUI();
+        ClearPathLines();
     }
 
     public GameObject GetStartPoint()
@@ -246,5 +273,71 @@ public class PathManager : MonoBehaviour
             currentPath.SetPosition(1, midPos);
             currentPath.SetPosition(2, endPos);
         }
+    }
+
+    public List<GameObject> FindPath(GameObject start, GameObject end)
+    {
+        List<GameObject> path = new List<GameObject>();
+        
+        // Pour l'instant, on fait un chemin direct
+        path.Add(start);
+        path.Add(end);
+
+        // Dessiner le chemin
+        DrawPath(path);
+        
+        return path;
+    }
+
+    public float GetPathDistance(List<GameObject> path)
+    {
+        float distance = 0f;
+        
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            distance += Vector3.Distance(path[i].transform.position, path[i + 1].transform.position);
+        }
+        
+        return distance;
+    }
+
+    public void DrawPath(List<GameObject> path)
+    {
+        // Effacer l'ancien chemin
+        ClearPath();
+
+        // Dessiner le nouveau chemin
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            DrawLine(path[i].transform.position, path[i + 1].transform.position);
+        }
+    }
+
+    private void DrawLine(Vector3 start, Vector3 end)
+    {
+        GameObject line = new GameObject("PathLine");
+        line.transform.parent = transform;
+        
+        LineRenderer lr = line.AddComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Sprites/Default"));
+        lr.startColor = Color.blue;
+        lr.endColor = Color.blue;
+        lr.startWidth = 0.1f;
+        lr.endWidth = 0.1f;
+        lr.positionCount = 2;
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
+        
+        pathLines.Add(line);
+    }
+
+    private void ClearPathLines()
+    {
+        foreach (var line in pathLines)
+        {
+            if (line != null)
+                Destroy(line);
+        }
+        pathLines.Clear();
     }
 } 

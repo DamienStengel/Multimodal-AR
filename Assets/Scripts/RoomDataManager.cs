@@ -6,7 +6,21 @@ using System.IO;
 public class RoomDataManager : MonoBehaviour
 {
     private static RoomDataManager instance;
-    public static RoomDataManager Instance => instance;
+    public static RoomDataManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<RoomDataManager>(true);
+                if (instance == null)
+                {
+                    Debug.LogError("Aucun RoomDataManager trouvé dans la scène!");
+                }
+            }
+            return instance;
+        }
+    }
 
     private RoomsData roomsData;
     private List<StudentData> studentsData;
@@ -25,7 +39,43 @@ public class RoomDataManager : MonoBehaviour
     void LoadRoomsData()
     {
         TextAsset jsonFile = Resources.Load<TextAsset>("rooms_data");
-        roomsData = JsonUtility.FromJson<RoomsData>(jsonFile.text);
+        if (jsonFile == null)
+        {
+            Debug.LogError("Le fichier rooms_data.json n'a pas été trouvé dans le dossier Resources");
+            return;
+        }
+        
+        try
+        {
+            string jsonContent = jsonFile.text;
+            Debug.Log($"Contenu JSON chargé: {jsonContent}"); // Pour déboguer
+            
+            roomsData = JsonUtility.FromJson<RoomsData>(jsonContent);
+            
+            if (roomsData == null)
+            {
+                Debug.LogError("Échec de la désérialisation des données des salles");
+                return;
+            }
+            
+            if (roomsData.rooms == null)
+            {
+                Debug.LogError("Le tableau des salles est null");
+                return;
+            }
+            
+            Debug.Log($"Données des salles chargées avec succès. Nombre de salles: {roomsData.rooms.Length}");
+            
+            // Afficher les salles chargées pour déboguer
+            foreach (var room in roomsData.rooms)
+            {
+                Debug.Log($"Salle chargée: {room.id} - {room.info.name}");
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Erreur lors du chargement des données des salles: {e.Message}\n{e.StackTrace}");
+        }
     }
 
     void LoadStudentsData()
@@ -58,8 +108,21 @@ public class RoomDataManager : MonoBehaviour
 
     public RoomInfo GetRoomInfo(string roomId)
     {
-        if (roomsData.rooms.ContainsKey(roomId))
-            return roomsData.rooms[roomId];
+        if (roomsData == null)
+        {
+            Debug.LogError("Les données des salles ne sont pas initialisées!");
+            return null;
+        }
+
+        var rooms = roomsData.GetRoomsDictionary();
+        Debug.Log($"Recherche d'informations pour la salle: {roomId}");
+        
+        if (rooms.ContainsKey(roomId))
+        {
+            return rooms[roomId];
+        }
+        
+        Debug.LogWarning($"Aucune information trouvée pour la salle: {roomId}");
         return null;
     }
 

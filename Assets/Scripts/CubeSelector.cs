@@ -8,7 +8,7 @@ public class CubeSelector : MonoBehaviour
     private Renderer cubeRenderer;
     private Color originalColor;
     private bool isSelected = false;
-    private bool isStartPoint = false;
+    private bool isInNavigationMode = false;
 
     private void Awake()
     {
@@ -31,7 +31,7 @@ public class CubeSelector : MonoBehaviour
         // Si c'était un point sélectionné, restaurer son état
         if (isSelected)
         {
-            cubeRenderer.material.color = isStartPoint ? Color.green : Color.red;
+            cubeRenderer.material.color = Color.yellow;
         }
     }
 
@@ -42,69 +42,93 @@ public class CubeSelector : MonoBehaviour
         LeanTouch.OnFingerTap -= HandleFingerTap;
     }
 
+    public void SetNavigationMode(bool enabled)
+    {
+        isInNavigationMode = enabled;
+        // Réinitialiser la couleur quand on entre/sort du mode navigation
+        if (!enabled && isSelected)
+        {
+            Deselect();
+        }
+    }
+
     private void HandleFingerTap(LeanFinger finger)
     {
-        // Vérifier si le tap est sur ce cube
-        var ray = finger.GetRay(Camera.main);
+        Ray ray = finger.GetRay();
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.transform == this.transform)
+            if (hit.transform == this.transform) // Vérifier si on a cliqué sur CE cube
             {
-                Debug.Log($"Tap détecté sur {gameObject.name}");
+                string cubeName = hit.transform.name;
+                Debug.Log($"Tap détecté sur {cubeName}");
 
-                if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-                    return;
-
-                if (selectedCube != null && selectedCube != this)
+                if (isInNavigationMode)
                 {
-                    selectedCube.Deselect();
-                }
-
-                if (!isSelected)
-                {
-                    Select();
+                    // En mode navigation, définir comme point d'arrivée
+                    PathManager.Instance.SetEndPoint(hit.transform.gameObject);
                 }
                 else
                 {
-                    Deselect();
-                }
+                    // Mode normal, désélectionner le cube précédent
+                    if (selectedCube != null && selectedCube != this)
+                    {
+                        selectedCube.Deselect();
+                    }
 
-                // Afficher le panel d'information
-                RoomInfoPanel.Instance.ShowRoomInfo(gameObject.name.Replace("Cube_", ""));
+                    // Afficher les infos de la salle
+                    if (cubeName.StartsWith("Cube_"))
+                    {
+                        string roomId = cubeName.Replace("Cube_", "");
+                        Select(roomId);
+                    }
+                }
             }
         }
     }
 
-    private void Select()
+    private void Select(string roomId)
     {
         isSelected = true;
         selectedCube = this;
-
-        // Si c'est le premier point sélectionné
-        if (PathManager.Instance.GetStartPoint() == null)
+        
+        cubeRenderer.material.color = Color.yellow;
+        
+        Debug.Log($"Tentative d'affichage du panel pour la salle: {roomId}");
+        
+        if (RoomDataManager.Instance == null)
         {
-            isStartPoint = true;
-            cubeRenderer.material.color = Color.green; // Point de départ en vert
-            PathManager.Instance.SetStartPoint(gameObject);
+            Debug.LogError("RoomDataManager.Instance est null!");
+            return;
+        }
+        
+        var roomInfo = RoomDataManager.Instance.GetRoomInfo(roomId);
+        if (roomInfo == null)
+        {
+            Debug.LogError($"Aucune information trouvée pour la salle {roomId}");
+            return;
+        }
+        
+        if (RoomInfoPanel.Instance != null)
+        {
+            RoomInfoPanel.Instance.ShowRoomInfo(roomId);
         }
         else
         {
-            isStartPoint = false;
-            cubeRenderer.material.color = Color.red; // Point d'arrivée en rouge
-            PathManager.Instance.SetEndPoint(gameObject);
+            Debug.LogError("RoomInfoPanel.Instance est null!");
         }
-
-        Debug.Log($"Cube sélectionné comme {(isStartPoint ? "départ" : "arrivée")}: {gameObject.name}");
+        
+        Debug.Log($"Cube sélectionné: {gameObject.name}");
     }
 
-    private void Deselect()
+    public void Deselect()
     {
         isSelected = false;
         if (selectedCube == this)
             selectedCube = null;
-        cubeRenderer.material.color = originalColor;
+        if (cubeRenderer != null)
+            cubeRenderer.material.color = originalColor;
     }
 
     public static CubeSelector GetSelectedCube()

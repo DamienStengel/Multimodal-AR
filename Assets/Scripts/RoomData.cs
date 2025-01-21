@@ -8,12 +8,35 @@ public class RoomInfo
     public int capacity;
     public string[] equipment;
     public string type;
-    public int floor;
     public string building;
+}
+
+[Serializable]
+public class RoomEntry
+{
+    public string id;
+    public RoomInfo info;
 }
 
 [Serializable]
 public class RoomsData
 {
-    public Dictionary<string, RoomInfo> rooms;
+    public RoomEntry[] rooms;
+    private Dictionary<string, RoomInfo> roomsDictionary;
+
+    public Dictionary<string, RoomInfo> GetRoomsDictionary()
+    {
+        if (roomsDictionary == null)
+        {
+            roomsDictionary = new Dictionary<string, RoomInfo>();
+            if (rooms != null)
+            {
+                foreach (var entry in rooms)
+                {
+                    roomsDictionary[entry.id] = entry.info;
+                }
+            }
+        }
+        return roomsDictionary;
+    }
 } 
