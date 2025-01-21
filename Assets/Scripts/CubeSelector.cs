@@ -8,6 +8,7 @@ public class CubeSelector : MonoBehaviour
     private Renderer cubeRenderer;
     private Color originalColor;
     private bool isSelected = false;
+    private bool isStartPoint = false;
 
     private void Awake()
     {
@@ -26,12 +27,18 @@ public class CubeSelector : MonoBehaviour
     {
         // S'abonner aux événements LeanTouch
         LeanTouch.OnFingerTap += HandleFingerTap;
-        Deselect();
+        
+        // Si c'était un point sélectionné, restaurer son état
+        if (isSelected)
+        {
+            cubeRenderer.material.color = isStartPoint ? Color.green : Color.red;
+        }
     }
 
     private void OnDisable()
     {
-        // Se désabonner des événements LeanTouch
+        // Sauvegarder la dernière position connue
+        PathManager.Instance.RegisterCubePosition(gameObject.name, transform.position);
         LeanTouch.OnFingerTap -= HandleFingerTap;
     }
 
@@ -71,8 +78,22 @@ public class CubeSelector : MonoBehaviour
     {
         isSelected = true;
         selectedCube = this;
-        cubeRenderer.material.color = Color.yellow;
-        Debug.Log($"Cube sélectionné: {gameObject.name}");
+
+        // Si c'est le premier point sélectionné
+        if (PathManager.Instance.GetStartPoint() == null)
+        {
+            isStartPoint = true;
+            cubeRenderer.material.color = Color.green; // Point de départ en vert
+            PathManager.Instance.SetStartPoint(gameObject);
+        }
+        else
+        {
+            isStartPoint = false;
+            cubeRenderer.material.color = Color.red; // Point d'arrivée en rouge
+            PathManager.Instance.SetEndPoint(gameObject);
+        }
+
+        Debug.Log($"Cube sélectionné comme {(isStartPoint ? "départ" : "arrivée")}: {gameObject.name}");
     }
 
     private void Deselect()
