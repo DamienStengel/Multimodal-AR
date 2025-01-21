@@ -14755,7 +14755,7 @@ FINALLY_0035:
 			{
 				// int n = count;
 				int32_t L_0;
-				L_0 = VirtualFuncInvoker0< int32_t >::Invoke(5 /* System.Int32 UnityEngine.XR.ARSubsystems.RuntimeReferenceImageLibrary::get_count() */, __this);
+				L_0 = VirtualFuncInvoker0< int32_t >::Invoke(6 /* System.Int32 UnityEngine.XR.ARSubsystems.RuntimeReferenceImageLibrary::get_count() */, __this);
 				V_0 = L_0;
 				// for (int i = 0; i < n; ++i)
 				V_1 = 0;
@@ -15072,7 +15072,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR JobHandle_t5DF5F99902FED3C801A81C05205CEA6CE0
 		XRReferenceImage_tB2544D6E18E55CD44F4EED1B0573A6A7154C1E2F L_3 = ___referenceImage3;
 		JobHandle_t5DF5F99902FED3C801A81C05205CEA6CE039EF08 L_4 = ___inputDeps4;
 		AddReferenceImageJobState_tCF90A84092F3D2A7536D1D28C9E6EC0D7F53937A L_5;
-		L_5 = VirtualFuncInvoker5< AddReferenceImageJobState_tCF90A84092F3D2A7536D1D28C9E6EC0D7F53937A, NativeSlice_1_tCEC4B2B900638EC1820BB61FE436766204DFD8DA, Vector2Int_t69B2886EBAB732D9B880565E18E7568F3DE0CE6A, int32_t, XRReferenceImage_tB2544D6E18E55CD44F4EED1B0573A6A7154C1E2F, JobHandle_t5DF5F99902FED3C801A81C05205CEA6CE039EF08 >::Invoke(10 /* UnityEngine.XR.ARSubsystems.AddReferenceImageJobState UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary::ScheduleAddImageWithValidationJobImpl(Unity.Collections.NativeSlice`1<System.Byte>,UnityEngine.Vector2Int,UnityEngine.TextureFormat,UnityEngine.XR.ARSubsystems.XRReferenceImage,Unity.Jobs.JobHandle) */, __this, L_0, L_1, L_2, L_3, L_4);
+		L_5 = VirtualFuncInvoker5< AddReferenceImageJobState_tCF90A84092F3D2A7536D1D28C9E6EC0D7F53937A, NativeSlice_1_tCEC4B2B900638EC1820BB61FE436766204DFD8DA, Vector2Int_t69B2886EBAB732D9B880565E18E7568F3DE0CE6A, int32_t, XRReferenceImage_tB2544D6E18E55CD44F4EED1B0573A6A7154C1E2F, JobHandle_t5DF5F99902FED3C801A81C05205CEA6CE039EF08 >::Invoke(11 /* UnityEngine.XR.ARSubsystems.AddReferenceImageJobState UnityEngine.XR.ARSubsystems.MutableRuntimeReferenceImageLibrary::ScheduleAddImageWithValidationJobImpl(Unity.Collections.NativeSlice`1<System.Byte>,UnityEngine.Vector2Int,UnityEngine.TextureFormat,UnityEngine.XR.ARSubsystems.XRReferenceImage,Unity.Jobs.JobHandle) */, __this, L_0, L_1, L_2, L_3, L_4);
 		V_0 = L_5;
 		JobHandle_t5DF5F99902FED3C801A81C05205CEA6CE039EF08 L_6;
 		L_6 = AddReferenceImageJobState_get_jobHandle_m02E9565D08C8156E799D1B852C14707856E6B12E_inline((&V_0), NULL);
