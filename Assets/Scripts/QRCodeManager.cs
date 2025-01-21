@@ -62,21 +62,10 @@ public class QRCodeManager : MonoBehaviour
 
     private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs)
     {
-        Debug.Log($"OnTrackedImagesChanged - Added: {eventArgs.added.Count}, Updated: {eventArgs.updated.Count}, Removed: {eventArgs.removed.Count}");
-
         foreach (var newImage in eventArgs.added)
         {
-            // Vérification supplémentaire pour la détection
-            Debug.Log($"Nouvelle image détectée:" +
-                     $"\nNom: {newImage.referenceImage.name}" +
-                     $"\nGUID: {newImage.referenceImage.guid}" +
-                     $"\nTaille physique: {newImage.size} mètres" +
-                     $"\nTaille texture: {newImage.referenceImage.texture.width}x{newImage.referenceImage.texture.height}");
-
-            // Vérifier si l'image est déjà trackée
             if (trackedImages.ContainsKey(newImage.referenceImage.guid.ToString()))
             {
-                Debug.LogWarning($"Image déjà trackée! GUID: {newImage.referenceImage.guid}");
                 continue;
             }
 
@@ -129,31 +118,24 @@ public class QRCodeManager : MonoBehaviour
                 renderer.material.renderQueue = -1;
             }
 
-            // Utiliser le GUID comme clé au lieu du nom
-            cube.name = $"Cube_{newImage.referenceImage.guid}";
+            cube.name = $"Cube_{newImage.referenceImage.name}";
             trackedImages[newImage.referenceImage.guid.ToString()] = cube;
 
-            Debug.Log($"Cube créé avec texte:" +
-                     $"\nPosition: {cube.transform.position}" +
-                     $"\nScale: {cube.transform.localScale}" +
-                     $"\nTaille image: {imageSize}" +
-                     $"\nNom de la pièce: {newImage.referenceImage.name}" +
-                     $"\nActive: {cube.activeSelf}" +
-                     $"\nRenderer enabled: {renderer?.enabled}");
+            BoxCollider boxCollider = cube.AddComponent<BoxCollider>();
+            boxCollider.size = new Vector3(1, 0.1f, 1); // Ajuster la taille du collider
+            
+            var selector = cube.AddComponent<CubeSelector>();
+            
+            // Log uniquement à la création initiale
+            Debug.Log($"Nouveau cube créé: {cube.name}");
         }
 
         foreach (var updatedImage in eventArgs.updated)
         {
-            // Utiliser le GUID comme clé
             if (trackedImages.TryGetValue(updatedImage.referenceImage.guid.ToString(), out GameObject cube))
             {
                 Vector3 position = updatedImage.transform.position;
                 position.y += 0.0005f;
-
-                Debug.Log($"Mise à jour cube:" +
-                         $"\nPosition image: {updatedImage.transform.position}" +
-                         $"\nPosition cube: {position}" +
-                         $"\nTracking state: {updatedImage.trackingState}");
 
                 if (updatedImage.trackingState == TrackingState.Tracking)
                 {
@@ -170,9 +152,9 @@ public class QRCodeManager : MonoBehaviour
 
         foreach (var removedImage in eventArgs.removed)
         {
-            // Utiliser le GUID comme clé
             if (trackedImages.TryGetValue(removedImage.referenceImage.guid.ToString(), out GameObject cube))
             {
+                Debug.Log($"Cube supprimé: {cube.name}");
                 Destroy(cube);
                 trackedImages.Remove(removedImage.referenceImage.guid.ToString());
             }
