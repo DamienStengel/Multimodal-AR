@@ -1,0 +1,104 @@
+{
+  "rooms": [
+    {
+      "id": "Room01",
+      "info": {
+        "name": "Salle 01",
+        "capacity": 30,
+        "equipment": ["Projecteur", "Tableau blanc", "PC professeur"],
+        "type": "Salle de cours",
+        "building": "Bâtiment A"
+      }
+    },
+    {
+      "id": "Room02",
+      "info": {
+        "name": "Salle 02",
+        "capacity": 25,
+        "equipment": ["Projecteur", "Tableau blanc", "20 PC"],
+        "type": "Salle informatique",
+        "building": "Bâtiment A"
+      }
+    },
+    {
+      "id": "Room03",
+      "info": {
+        "name": "Salle 03",
+        "capacity": 35,
+        "equipment": ["Projecteur", "Tableau blanc", "PC professeur"],
+        "type": "Salle de cours",
+        "building": "Bâtiment A"
+      }
+    },
+    {
+      "id": "Room07",
+      "info": {
+        "name": "Salle 07",
+        "capacity": 28,
+        "equipment": ["Projecteur", "Tableau blanc", "PC professeur"],
+        "type": "Salle de cours",
+        "building": "Bâtiment A"
+      }
+    },
+    {
+      "id": "Room25",
+      "info": {
+        "name": "Salle 25",
+        "capacity": 40,
+        "equipment": ["Projecteur", "Tableau blanc", "PC professeur", "Système audio"],
+        "type": "Amphithéâtre",
+        "building": "Bâtiment A"
+      }
+    },
+    {
+      "id": "Room42",
+      "info": {
+        "name": "Salle 42",
+        "capacity": 20,
+        "equipment": ["Projecteur", "Tableau blanc", "15 PC"],
+        "type": "Salle informatique",
+        "building": "Bâtiment A"
+      }
+    },
+    {
+      "id": "Room260",
+      "info": {
+        "name": "Salle 260",
+        "capacity": 32,
+        "equipment": ["Projecteur", "Tableau blanc", "PC professeur"],
+        "type": "Salle de cours",
+        "building": "Bâtiment B"
+      }
+    },
+    {
+      "id": "Room420",
+      "info": {
+        "name": "Salle 420",
+        "capacity": 25,
+        "equipment": ["Projecteur", "Tableau blanc", "Matériel TP Physique"],
+        "type": "Laboratoire",
+        "building": "Bâtiment B"
+      }
+    },
+    {
+      "id": "Room507",
+      "info": {
+        "name": "Salle 507",
+        "capacity": 30,
+        "equipment": ["Projecteur", "Tableau blanc", "PC professeur"],
+        "type": "Salle de cours",
+        "building": "Bâtiment A"
+      }
+    },
+    {
+      "id": "Room682",
+      "info": {
+        "name": "Salle 682",
+        "capacity": 35,
+        "equipment": ["Projecteur", "Tableau blanc", "Matériel TP Chimie"],
+        "type": "Laboratoire",
+        "building": "Bâtiment B"
+      }
+    }
+  ]
+} 

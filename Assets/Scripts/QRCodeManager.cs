@@ -69,12 +69,16 @@ public class QRCodeManager : MonoBehaviour
                 continue;
             }
 
+            // Calculer la position avec le cube au-dessus du QR code
             Vector3 position = newImage.transform.position;
-            position.y += 0.0005f;
+            Vector2 imageSize = newImage.size;
+            float cubeHeight = 0.001f; // Hauteur du cube
+            position.y += cubeHeight / 2; // Positionner le centre du cube à la moitié de sa hauteur
+
             GameObject cube = Instantiate(cubePrefab, position, newImage.transform.rotation);
             
-            Vector2 imageSize = newImage.size;
-            cube.transform.localScale = new Vector3(imageSize.x, 0.001f, imageSize.y);
+            // Définir l'échelle du cube
+            cube.transform.localScale = new Vector3(imageSize.x, cubeHeight, imageSize.y);
             
             // Créer le TextMesh pour afficher le nom de la pièce
             GameObject textObj = new GameObject("RoomText");
@@ -86,6 +90,7 @@ public class QRCodeManager : MonoBehaviour
             
             TextMesh textMesh = textObj.AddComponent<TextMesh>();
             textMesh.text = newImage.referenceImage.name;
+            Debug.Log($"Création TextMesh pour la salle: {newImage.referenceImage.name}"); // Debug
             textMesh.fontSize = 100; // Ajustez selon vos besoins
             textMesh.alignment = TextAlignment.Center;
             textMesh.anchor = TextAnchor.MiddleCenter;
@@ -121,8 +126,9 @@ public class QRCodeManager : MonoBehaviour
             cube.name = $"Cube_{newImage.referenceImage.name}";
             trackedImages[newImage.referenceImage.guid.ToString()] = cube;
 
+            // Ajuster la taille du collider pour qu'il corresponde au cube
             BoxCollider boxCollider = cube.AddComponent<BoxCollider>();
-            boxCollider.size = new Vector3(1, 0.1f, 1); // Ajuster la taille du collider
+            boxCollider.size = Vector3.one; // Le collider aura la même taille que l'échelle locale
             
             var selector = cube.AddComponent<CubeSelector>();
             
@@ -135,13 +141,17 @@ public class QRCodeManager : MonoBehaviour
             if (trackedImages.TryGetValue(updatedImage.referenceImage.guid.ToString(), out GameObject cube))
             {
                 Vector3 position = updatedImage.transform.position;
-                position.y += 0.0005f;
+                float cubeHeight = cube.transform.localScale.y;
+                position.y += cubeHeight / 2;
 
                 if (updatedImage.trackingState == TrackingState.Tracking)
                 {
                     cube.SetActive(true);
                     cube.transform.position = position;
                     cube.transform.rotation = updatedImage.transform.rotation;
+                    
+                    // Mettre à jour la position du chemin si ce cube fait partie du chemin
+                    PathManager.Instance.UpdatePathPosition();
                 }
                 else
                 {
