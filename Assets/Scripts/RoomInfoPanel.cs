@@ -49,6 +49,13 @@ public class RoomInfoPanel : UIPanel
         {
             instance = this;
             InitializeLayoutComponents();
+            
+            // Désactiver le canvas de navigation au démarrage
+            if (navigationCanvas != null)
+            {
+                navigationCanvas.gameObject.SetActive(false);
+            }
+            
             gameObject.SetActive(false);
         }
         else

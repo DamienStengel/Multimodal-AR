@@ -34,6 +34,7 @@ public class PathManager : MonoBehaviour
         if (pathUI != null)
         {
             pathUI.HideClearButton(); // Cacher le bouton au démarrage
+            pathUI.gameObject.SetActive(false); // Désactiver l'UI de navigation au démarrage
         }
 
         // Créer un parent fixe pour tous les chemins
