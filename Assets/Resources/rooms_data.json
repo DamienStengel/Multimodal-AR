@@ -1,0 +1,19 @@
+{
+  "Room01": {
+    "name": "Salle 01",
+    "capacity": 30,
+    "equipment": ["Projecteur", "Tableau blanc", "PC professeur"],
+    "type": "Salle de cours",
+    "floor": 0,
+    "building": "Bâtiment A"
+  },
+  "Room02": {
+    "name": "Salle 02",
+    "capacity": 25,
+    "equipment": ["Projecteur", "Tableau blanc", "20 PC"],
+    "type": "Salle informatique",
+    "floor": 0,
+    "building": "Bâtiment A"
+  }
+  // ... Ajouter les données pour toutes les autres salles
+} 

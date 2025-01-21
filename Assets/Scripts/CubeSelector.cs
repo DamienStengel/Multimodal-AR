@@ -70,6 +70,9 @@ public class CubeSelector : MonoBehaviour
                 {
                     Deselect();
                 }
+
+                // Afficher le panel d'information
+                RoomInfoPanel.Instance.ShowRoomInfo(gameObject.name.Replace("Cube_", ""));
             }
         }
     }
