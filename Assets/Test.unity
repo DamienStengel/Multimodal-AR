@@ -322,7 +322,7 @@ MonoBehaviour:
   m_FocusMode: -1
   m_LightEstimationMode: -1
   m_AutoFocus: 1
-  m_LightEstimation: 0
+  m_LightEstimation: -1
   m_FacingDirection: 1
 --- !u!114 &559298756
 MonoBehaviour:
@@ -605,6 +605,11 @@ MonoBehaviour:
   trackedImageManager: {fileID: 1900725050}
   cubePrefab: {fileID: 8765150416456629151, guid: 564f1752326bc4886a315a3846c46400,
     type: 3}
+  maxTrackingDistance: 20
+  minConfidenceThreshold: 0.5
+  enableAggressiveScanning: 1
+  scanFrequency: 0.5
+  physicalImageSize: 0.1
 --- !u!114 &1900725050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619,5 +624,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SerializedLibrary: {fileID: 11400000, guid: f0d557d61385a4fbe8485173408ebba4,
     type: 2}
-  m_MaxNumberOfMovingImages: 1
+  m_MaxNumberOfMovingImages: 20
   m_TrackedImagePrefab: {fileID: 0}
