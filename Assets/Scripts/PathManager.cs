@@ -236,6 +236,12 @@ public class PathManager : MonoBehaviour
             selector.SetNavigationMode(false);
         }
 
+        // Désactiver le canvas de navigation
+        if (pathUI != null)
+        {
+            pathUI.gameObject.SetActive(false);
+        }
+
         UpdateUI();
         ClearPathLines();
     }

@@ -278,6 +278,17 @@ public class RoomInfoPanel : UIPanel
 
     public override void Hide()
     {
+        // Désélectionner le cube actuel
+        var cube = GameObject.Find($"Cube_{currentRoomId}");
+        if (cube != null)
+        {
+            var selector = cube.GetComponent<CubeSelector>();
+            if (selector != null)
+            {
+                selector.Deselect();
+            }
+        }
+        
         base.Hide();
     }
 } 
