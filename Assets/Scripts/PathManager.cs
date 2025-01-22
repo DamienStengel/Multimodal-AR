@@ -73,42 +73,38 @@ public class PathManager : MonoBehaviour
 
     private void DrawPath()
     {
+        if (startCube == null || endCube == null) return;
+
         if (currentPath != null)
         {
             Destroy(currentPath.gameObject);
         }
 
-        if (startCube == null || endCube == null) return;
-
+        // Créer et configurer le chemin
         currentPath = Instantiate(pathPrefab, pathParent.transform);
-        currentPath.positionCount = 3; // Utiliser 3 points pour créer un chemin en "escalier"
+        currentPath.positionCount = 3;
         currentPath.useWorldSpace = true;
-
-        // Configurer le LineRenderer
         currentPath.startWidth = 0.01f;
         currentPath.endWidth = 0.01f;
         currentPath.material = pathMaterial;
-        
-        // Désactiver les ombres
         currentPath.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         currentPath.receiveShadows = false;
 
         // Calculer les positions
         Vector3 startPos = startCube.transform.position;
         Vector3 endPos = endCube.transform.position;
-        
-        // Calculer le point intermédiaire pour créer un chemin en "escalier"
         Vector3 midPos = new Vector3(
             startPos.x,
             Mathf.Max(startPos.y, endPos.y) + 0.02f,
             endPos.z
         );
 
+        // Définir les positions du chemin
         currentPath.SetPosition(0, startPos);
         currentPath.SetPosition(1, midPos);
         currentPath.SetPosition(2, endPos);
 
-        // Calculer la distance en prenant en compte les déplacements verticaux
+        // Calculer la distance et le temps
         float horizontalDistance = Vector2.Distance(
             new Vector2(startPos.x, startPos.z),
             new Vector2(endPos.x, endPos.z)
@@ -116,18 +112,15 @@ public class PathManager : MonoBehaviour
 
         float verticalDistance = Mathf.Abs(endPos.y - startPos.y) * heightPenalty;
         float totalDistance = horizontalDistance + verticalDistance;
-
-        // Convertir la distance en mètres (si nécessaire, selon l'échelle de votre scène)
-        float distanceInMeters = totalDistance * 100; // Ajustez ce multiplicateur selon votre échelle
-
-        // Calculer le temps en secondes
+        float distanceInMeters = totalDistance * 100;
         float timeInSeconds = distanceInMeters / walkingSpeed;
-        
+
         Debug.Log($"Distance horizontale: {horizontalDistance}m, " +
                   $"Distance verticale: {verticalDistance}m, " +
                   $"Distance totale: {distanceInMeters}m, " +
                   $"Temps estimé: {timeInSeconds}s");
 
+        // Mettre à jour l'UI avec le temps calculé
         ShowPathInfo(timeInSeconds);
     }
 
@@ -143,7 +136,7 @@ public class PathManager : MonoBehaviour
                 TextMesh startText = startCube.GetComponentInChildren<TextMesh>();
                 if (startText != null)
                 {
-                    startRoom = startText.text.Trim(); // Enlever les espaces
+                    startRoom = startText.text.Trim();
                     Debug.Log($"Nom salle départ trouvé: '{startRoom}'");
                 }
             }
@@ -153,18 +146,23 @@ public class PathManager : MonoBehaviour
                 TextMesh endText = endCube.GetComponentInChildren<TextMesh>();
                 if (endText != null)
                 {
-                    endRoom = endText.text.Trim(); // Enlever les espaces
+                    endRoom = endText.text.Trim();
                     Debug.Log($"Nom salle arrivée trouvé: '{endRoom}'");
                 }
             }
 
-            // Construire le texte avec des espaces explicites
             string displayText = string.Format("De : {0}\nVers : {1}", 
                 string.IsNullOrEmpty(startRoom) ? "---" : startRoom,
                 string.IsNullOrEmpty(endRoom) ? "---" : endRoom);
 
             Debug.Log($"Texte final envoyé à l'UI: '{displayText}'");
             pathUI.UpdateSelectionText(displayText);
+
+            // Réinitialiser le texte du temps si on n'a pas les deux points
+            if (startCube == null || endCube == null)
+            {
+                pathUI.UpdateTimeText("");
+            }
 
             if (startCube != null || endCube != null)
             {
