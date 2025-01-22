@@ -9,6 +9,7 @@ public class CubeSelector : MonoBehaviour
     private Color originalColor;
     private bool isSelected = false;
     private bool isInNavigationMode = false;
+    private AudioSource audioSource;
 
     private void Awake()
     {
@@ -21,6 +22,10 @@ public class CubeSelector : MonoBehaviour
         {
             Debug.LogError($"Pas de Renderer trouvé sur {gameObject.name}");
         }
+
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.clip = Resources.Load<AudioClip>("Sounds/select_sound");
     }
 
     private void OnEnable()
@@ -94,6 +99,15 @@ public class CubeSelector : MonoBehaviour
         selectedCube = this;
         
         cubeRenderer.material.color = Color.yellow;
+        
+        if (audioSource != null && audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
+        else
+        {
+            Debug.LogWarning("Son de sélection non trouvé");
+        }
         
         Debug.Log($"Tentative d'affichage du panel pour la salle: {roomId}");
         
