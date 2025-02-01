@@ -14,7 +14,7 @@ Campus Navigator AR est une application de réalité augmentée développée sou
   - Calcul de chemin
   - Estimation du temps de parcours
   - Visualisation du trajet en réalité augmentée
-- Visualisation de la liste des étudiants que l'ont peu filtré avec l'année/filière/moyen de locomotion
+- Visualisation de la liste des étudiants que l'ont peu filtrer avec l'année/filière/moyen de locomotion
 ## Prérequis
 - Unity 2021.3.3f1
 - AR Foundation (version compatible avec Unity 2021.3.3f1)
