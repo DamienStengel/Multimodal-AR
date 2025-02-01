@@ -17,7 +17,7 @@ Campus Navigator AR est une application de réalité augmentée conçue pour aid
   * Calcul et affichage du temps de trajet
   * Visualisation du chemin en RA
 
-### Léo [Nom de famille]
+### Toa [Nom de famille]
 * (**) Design of a menu that shows the whereabouts of students of interest by filtering by student year or specialization (IHM, MAM, AL, WD, etc…)
   * Interface de filtrage des étudiants
   * Système de tri par année/spécialisation
