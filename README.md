@@ -68,6 +68,7 @@ L'application fonctionne avec une carte spécifique de l'établissement où les 
 - Les espaces communs (bibliothèque, cafétéria, etc.)
 - Les entrées et sorties
 - Les QR codes correspondant à chaque salle
+![TIM-Map_Polytech](https://github.com/user-attachments/assets/8db7b93b-faa3-4ce6-a114-c918a980eb0d)
 
 ## Notes techniques
 
